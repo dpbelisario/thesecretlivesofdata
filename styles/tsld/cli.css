@@ -1,0 +1,58 @@
+/* Command / API callouts used in subtitles by /ratis and /rocksdb. */
+.subtitle pre.cmd,
+.subtitle pre.api,
+.title pre.cmd,
+.title pre.api {
+  display: table;
+  max-width: 100%;
+  margin: 6px auto 4px auto;
+  padding: 6px 12px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-radius: 4px;
+}
+
+.subtitle pre.cmd,
+.title pre.cmd {
+  color: #f5f5f5;
+  background: #2b2b2b;
+  border: 1px solid #111;
+}
+
+.subtitle pre.api,
+.title pre.api {
+  color: #1f3b57;
+  background: #eef4fa;
+  border: 1px solid steelblue;
+}
+
+.subtitle h2 code,
+.title h3 code {
+  font-size: 0.8em;
+  color: #1f3b57;
+  background: #eef4fa;
+}
+
+.title ul.cheatsheet {
+  display: inline-block;
+  text-align: left;
+  font-size: 15px;
+}
+
+.title ul.cheatsheet code {
+  font-size: 14px;
+}
+
+@media (max-width: 600px) {
+  .subtitle pre.cmd,
+  .subtitle pre.api {
+    font-size: 12px;
+  }
+  .subtitle h2 {
+    font-size: 20px;
+  }
+}

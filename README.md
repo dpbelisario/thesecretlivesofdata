@@ -22,4 +22,16 @@ Please report any bugs you find or any suggestions you have for how to make thes
 
 2. Apache Kafka ([#4](https://github.com/benbjohnson/thesecretlivesofdata/issues/4)) - *Planning*
 
+3. [Apache Ratis: Raft as a Java Library](ratis/) - leader election with pre-vote, the write and read paths,
+   partitions, and the `ratis sh` commands that steer leadership, membership and snapshots.
+
+4. [RocksDB: An LSM-Tree Storage Engine](rocksdb/) - the WAL, MemTables, flushes, SST levels, Bloom-filtered
+   reads and compaction, the `ldb` / `sst_dump` commands that inspect them, and how a Ratis
+   StateMachine stores its state in RocksDB.
+
+Each step of the Ratis and RocksDB walkthroughs shows the command, client API call or config key that
+drives it. To view them locally, run `python3 -m http.server` from the repository root and open
+`http://localhost:8000/ratis/` or `http://localhost:8000/rocksdb/`. Add `?rate=4` to the URL to play
+the animations four times faster.
+
 If you have suggestions for new topics, please submit a new Github issue.
