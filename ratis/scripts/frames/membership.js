@@ -106,7 +106,8 @@ define(["./helpers"], function (helpers) {
         })
         .after(1, h.until(function () { return node("n3").log().length >= 2; })).indefinite()
         .after(latency(1), function () {
-            subtitle('<h2>Now the leader appends a <em>joint configuration</em> C(old,new). Until it commits, decisions need a majority of the old set <strong>and</strong> of the new set.</h2>');
+            subtitle('<h2>Now the leader appends a <em>joint configuration</em> C(old,new). Until it commits, decisions need a majority of the old set <strong>and</strong> of the new set.</h2>'
+                + h.cmd('ratis sh peer add -peers $PEERS -peerId n3 -address n3:9872'));
             node("n3")._inConf = true;
             node("n3").resetElectionTimer();
             setCluster(["n0", "n1", "n2", "n3"]);
@@ -120,6 +121,7 @@ define(["./helpers"], function (helpers) {
         .after(1, h.until(committed("C(new)"))).indefinite()
         .after(latency(1), function () {
             subtitle('<h2>C(new) is committed: n3 is a full voting member and the shell prints success. A majority is now 3 of 4.</h2>'
+                + h.cmd('ratis sh peer add -peers $PEERS -peerId n3 -address n3:9872')
                 + h.api('StateMachine.notifyConfigurationChanged(term, index, newConf)   // on every peer'), false);
         })
         .after(1, wait).indefinite()
@@ -150,7 +152,8 @@ define(["./helpers"], function (helpers) {
         .after(latency(1), function () {
             node("n1").state("stopped");
             layout.invalidate();
-            subtitle('<h2>Once n1 is out of the committed configuration, it shuts itself down. Its storage directory can be deleted.</h2>', false);
+            subtitle('<h2>Once n1 is out of the committed configuration, it shuts itself down. Its storage directory can be deleted.</h2>'
+                + h.cmd('ratis sh peer remove -peers $PEERS,n3:9872 -peerId n1'), false);
         })
         .after(1, wait).indefinite()
         .after(1, function () {

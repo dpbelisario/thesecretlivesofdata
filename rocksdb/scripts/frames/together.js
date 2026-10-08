@@ -22,17 +22,18 @@ define(["./helpers"], function (helpers) {
         .after(300, function () {
             var sm = m().clients.create("sm");
             m().title = "";
-            h.load([["k1", "a"], ["k2", "b"], ["k3", "c"], ["k4", "d"], ["#applied", "38"]]);
+            db().visible = {mem: true, wal: true, levels: true};
+            h.load([["k1", "a"], ["k2", "b"], ["k3", "c"], ["k4", "d"], ["#idx", "38"]]);
             m().switchMemtable();
             m().flush();
             m().compact(0);
-            h.load([["k2", "e"], ["#applied", "40"]]);
+            h.load([["k2", "e"], ["#idx", "40"]]);
             m().switchMemtable();
             m().flush();
-            h.load([["k5", "f"], ["#applied", "41"]]);
+            h.load([["k5", "f"], ["#idx", "41"]]);
             sm.value("SM");
             sm.color = "steelblue";
-            sm.caption = "Ratis StateMachine";
+            sm.caption = "StateMachine";
             h.ldb();
             h.say('<h2>Back to Ratis. A common design, used by Apache Ozone\'s Ozone Manager, is a StateMachine that keeps its state in RocksDB.</h2>');
         })
@@ -43,18 +44,18 @@ define(["./helpers"], function (helpers) {
         //------------------------------
         .after(100, function () {
             h.say('<h2>When Ratis commits log entry 42, <code>applyTransaction()</code> writes it as one WriteBatch that also records the applied index, so the data and the Raft position always move together.</h2>'
-                + h.api('// sketch, RocksJava\npublic CompletableFuture&lt;Message&gt; applyTransaction(TransactionContext trx) {\n  try (WriteBatch batch = new WriteBatch()) {\n    batch.put(key, value);\n    batch.put(APPLIED, toBytes(trx.getLogEntry().getIndex()));\n    db.write(writeOptions, batch);\n  } ...'));
+                + h.api('// sketch, RocksJava\npublic CompletableFuture&lt;Message&gt; applyTransaction(TransactionContext trx) {\n  try (WriteBatch batch = new WriteBatch()) {\n    batch.put(key, value);\n    batch.put(IDX_KEY, toBytes(trx.getLogEntry().getIndex()));   // "#idx"\n    db.write(writeOptions, batch);\n  } ...'));
         })
         .after(300, function () {
             m().send("sm", "lbl-wal", {type: "PUT"}, function () {
-                m().writeBatch([["k6", "g"], ["#applied", "42"]]);
+                m().writeBatch([["k6", "g"], ["#idx", "42"]]);
                 h.redraw();
             });
             h.redraw();
         })
         .after(latency(1.2), h.step).indefinite()
         .after(100, function () {
-            h.say('<h2>After a restart, the StateMachine reads <code>#applied</code> back and reports it from <code>getLastAppliedTermIndex()</code>. Ratis then replays only the newer log entries.</h2>');
+            h.say('<h2>After a restart, the StateMachine reads <code>#idx</code> back and reports it from <code>getLastAppliedTermIndex()</code>. Ratis then replays only the newer log entries.</h2>');
         })
         .after(100, h.step).indefinite()
         .after(100, function () {

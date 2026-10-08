@@ -25,6 +25,7 @@ define(["./helpers"], function (helpers) {
         .after(200, h.step).indefinite()
         .after(300, function () {
             m().title = "";
+            db().visible = {mem: true, wal: true, levels: true};
             // L1: two non-overlapping files.
             h.load([["a", "1"], ["b", "2"], ["c", "3"], ["d", "4"], ["e", "5"], ["f", "6"]]);
             m().switchMemtable();

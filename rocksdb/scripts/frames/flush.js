@@ -21,6 +21,7 @@ define(["./helpers"], function (helpers) {
         .after(200, h.step).indefinite()
         .after(300, function () {
             m().title = "";
+            db().visible = {mem: true, wal: true, levels: true};
             h.load([["a", "5"], ["b", null], ["d", "4"], ["f", "6"]]);
             h.app();
             h.ldb();

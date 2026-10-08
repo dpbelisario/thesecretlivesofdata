@@ -62,6 +62,7 @@ define(["./helpers"], function (helpers) {
         })
         .after(latency(1.1), function () {
             subtitle('<h2>The shell calls <code>admin().transferLeadership(n2)</code>. The leader checks n2 is caught up, then sends it a <em style="color:purple">StartLeaderElection</em>.</h2>'
+                + h.cmd('ratis sh election transfer -peers $PEERS -address n2:9872')
                 + h.api('client.admin().transferLeadership(RaftPeerId.valueOf("n2"), timeoutMs)'));
         })
         .at(model(), "stateChange", function (event) {
@@ -90,6 +91,7 @@ define(["./helpers"], function (helpers) {
         })
         .after(latency(2) + 100, function () {
             subtitle('<h2>n0 still follows the leader and copies the log, but its election timer is gone. It will never start an election.</h2>'
+                + h.cmd('ratis sh election pause -peers $PEERS -address n0:9872')
                 + h.api('client.getLeaderElectionManagementApi(RaftPeerId.valueOf("n0")).pause()'));
         })
         .after(1, function () {
@@ -143,6 +145,7 @@ define(["./helpers"], function (helpers) {
         })
         .after(latency(1.1), function () {
             subtitle('<h2>' + stepped.id + ' steps down. It can\'t be re-elected for a while, so another peer takes over.</h2>'
+                + h.cmd('ratis sh election stepDown -peers $PEERS')
                 + h.api('raft.server.leaderelection.leader.step-down.wait-time = 10s'));
         })
         .at(model(), "stateChange", function (event) {

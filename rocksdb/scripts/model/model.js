@@ -45,7 +45,7 @@ define(["./controls", "./client", "./message"], function (Controls, Client, Mess
             levels: [[], [], []],
             snapshot: null,
             checkpoint: null,
-            visible: {wal: true, levels: true},
+            visible: {mem: false, wal: false, levels: false},
         };
         this.highlights = {};
         this.badges = {};
@@ -278,7 +278,7 @@ define(["./controls", "./client", "./message"], function (Controls, Client, Mess
 
     Model.LAYOUT = {
         memX: 15, memY: 3, memW: 21, immStep: 24,
-        walX: 15, walY: 37, walW: 9.5, walStep: 10.5,
+        walX: 15, walY: 37, walW: 11, walStep: 12,
         levelY: [46, 63, 80], fileX: 15, fileW: 14, fileStep: 16,
         cpX: 82, cpW: 16,
     };
@@ -310,7 +310,7 @@ define(["./controls", "./client", "./message"], function (Controls, Client, Mess
                         lines: memLines(m)});
         });
         if (db.visible.wal) {
-            db.wal.slice(-7).forEach(function (rec, i) {
+            db.wal.slice(-6).forEach(function (rec, i) {
                 boxes.push({id: rec.id, kind: "wal", x: L.walX + L.walStep * i, y: L.walY, w: L.walW,
                             title: null, sub: null, lines: [rec.text]});
             });
@@ -327,7 +327,7 @@ define(["./controls", "./client", "./message"], function (Controls, Client, Mess
         }
         if (db.checkpoint) {
             boxes.push({id: "checkpoint", kind: "checkpoint", x: L.cpX, y: L.levelY[0], w: L.cpW,
-                        title: db.checkpoint.dir, sub: "hard links", lines: db.checkpoint.files});
+                        title: db.checkpoint.dir.split("/").pop() + "/", sub: "checkpoint", lines: db.checkpoint.files});
         }
         return boxes;
     };

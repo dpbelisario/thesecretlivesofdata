@@ -20,6 +20,7 @@ define(["./helpers"], function (helpers) {
         .after(200, h.step).indefinite()
         .after(300, function () {
             m().title = "";
+            db().visible = {mem: true, wal: true, levels: true};
             h.app();
             h.ldb();
             h.say('<h2>An empty database. Your service writes key <code>a</code>:</h2>'

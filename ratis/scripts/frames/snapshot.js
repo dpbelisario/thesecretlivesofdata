@@ -85,7 +85,8 @@ define(["../model/log_entry", "./helpers"], function (LogEntry, helpers) {
         .after(100, h.step).indefinite()
         .after(100, function () {
             say('<h2>Ratis calls <code>takeSnapshot()</code>. Your code writes the state to disk and returns the last index it covers. n1 can now delete entries 1&ndash;4.</h2>'
-                + h.api('long takeSnapshot()   // e.g. writes sm/snapshot.1_4\n\n<raft.server.storage.dir>/<group-uuid>/\n  current/  raft-meta  raft-meta.conf  log_inprogress_5\n  sm/       snapshot.1_4'));
+                + h.cmd('ratis sh snapshot create -peers $PEERS -peerId n1')
+                + h.api('long takeSnapshot()   // e.g. writes sm/snapshot.1_4\n\n&lt;raft.server.storage.dir&gt;/&lt;group-uuid&gt;/\n  current/  raft-meta  raft-meta.conf  log_inprogress_5\n  sm/       snapshot.1_4'));
         })
         .after(100, h.step).indefinite()
         .after(100, function () {
